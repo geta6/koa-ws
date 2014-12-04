@@ -1,0 +1,113 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    style.
+      html, body {
+        margin: 0;
+        padding: 0;
+        color: #333;
+        font: 300 1rem/1.5 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', 'Arial', '.HiraKakuInterface-W2', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', Sans-Serif;
+      }
+      header {
+        padding: 50px;
+        height: 100px;
+        background-color: #18A76D;
+        text-align: center;
+        color: white;
+      }
+      nav {
+        height: 50px;
+        padding: 0 50px;
+        background-color: #F8F8F8;
+        border-bottom: 1px solid #E7E7E7;
+        line-height: 50px;
+      }
+      nav .count {
+        padding-left: 10px;
+      }
+      article {
+        padding: 50px;
+        font-family: 'Monaco', Monospace;
+      }
+      .audio {
+        display: inline-block;
+        width: 50%;
+      }
+      .audio img {
+        display: block;
+        margin: 0 auto 5px auto;
+        width: 60px;
+        height: 60px;
+      }
+  body
+
+    header
+      .audio(data-guid='37c4960d-15ca-4673-bd6e-9ef46c0b4704')
+        img
+        audio(controls=true)
+        .plays 0
+
+    nav
+      .visit
+        span 現在の訪問者数:
+        span.count
+
+    article
+      #console
+
+    script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='/socket.io/socket.io.js')
+    script.
+      var socket = new io.connect(location.origin.replace(/^https*/, 'ws'));
+      var stdout = function(text){ $('#console').prepend($('<li>').text(text)); };
+      var stdsub = function(text){ $('#console').prepend($('<li>').text(text).css('color', 'gray')); };
+      var stderr = function(text){ $('#console').prepend($('<li>').text(text).css('color', 'red')); };
+      var username = window.prompt('What is your name?');
+
+      window.onerror = function (err, url, line, char) {
+        stderr(err + ' - ' + line + ':' + char);
+      }
+
+      var setPlaysByTrackData = function (track){
+        $('[data-guid="' + track.guid + '"]').find('.plays').text(track.play);
+      }
+
+      $('.audio').each(function(){
+        var guid = $(this).attr('data-guid');
+        var $audio = $(this).find('audio').attr('src', guid + '.mp3');
+        var $image = $(this).find('img').attr('src', guid + '.jpeg');
+
+        $audio.on('loadeddata', function(){
+          stdout('audio::load, track guid: ' + guid);
+        });
+
+        $audio.on('play', function(){
+          socket.emit('track', { guid: guid });
+          stdout('audio:play, track guid: ' + guid);
+        });
+      });
+
+      socket.on('connect', function(){
+        stdout('ws connect');
+        socket.emit('visit', {name: username});
+      });
+
+      socket.on('disconnect', function(){
+        stderr('ws disconnect');
+      });
+
+      socket.on('visit', function(visit){
+        $('.visit .count').text(visit.count);
+      });
+
+      socket.on('track', function(track){
+        stdout('track update, plays: ' + track.play + ', guid: ' + track.guid);
+        setPlaysByTrackData(track);
+      });
+
+      socket.on('tracks', function(tracks){
+        for (var i = 0, track; track = tracks[i]; i++) {
+          setPlaysByTrackData(track);
+        }
+      });

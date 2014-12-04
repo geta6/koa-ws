@@ -1,0 +1,11 @@
+{
+  "indent"    : 2,
+  "camelcase" : true,
+  "maxlen"    : 120,
+  "unused"    : true,
+  "eqeqeq"    : true,
+  "undef"     : true,
+  "devel"     : true,
+  "node"      : true,
+  "esnext"    : true
+}

@@ -1,0 +1,13 @@
+.DS_Store
+*.sw*
+
+/.bundle
+/.env
+/.env.*
+/vendor
+/tmp
+
+node_modules
+npm-debug.log
+newrelic_agent.log
+

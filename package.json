@@ -1,0 +1,35 @@
+{
+  "name": "koa-ws",
+  "version": "1.0.0",
+  "description": "koa with socket.io",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --harmony index.js",
+    "test": "NODE_ENV=test mocha --harmony --reporter spec"
+  },
+  "author": "geta6",
+  "license": "ISC",
+  "dependencies": {
+    "co": "^4.0.0",
+    "co-wait": "0.0.0",
+    "debug": "^2.1.0",
+    "dotenv": "^0.4.0",
+    "jade": "^1.7.0",
+    "koa": "^0.13.0",
+    "koa-compose": "^2.3.0",
+    "koa-logger": "^1.2.2",
+    "koa-static": "^1.4.7",
+    "koa-views": "^2.1.2",
+    "redis": "^0.12.1",
+    "socket.io": "^1.2.1"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha-jshint": "0.0.9",
+    "socket.io-client": "^1.2.1",
+    "supertest": "^0.15.0"
+  },
+  "engines": {
+    "node": "^0.11.9"
+  }
+}
