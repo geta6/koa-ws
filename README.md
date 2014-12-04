@@ -1,5 +1,7 @@
 # koa-ws
 
+  [![Circle CI](https://circleci.com/gh/geta6/koa-ws/tree/master.svg?style=svg)](https://circleci.com/gh/geta6/koa-ws/tree/master)
+
   must be running ***node 0.11.9*** or higher for generator support.
 
   must run node/mocha with the `--harmony` flag.
