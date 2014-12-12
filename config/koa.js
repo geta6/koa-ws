@@ -8,6 +8,8 @@ var onerror = function(err){
   if (err) console.error(err);
 };
 
+// https://github.com/yukik/cocotte-mixin-ws
+
 koa.prototype.ws = function(event, fn) {
   assert(typeof event === 'string', 'app.ws requires string in first param');
   assert(fn.constructor.name === 'GeneratorFunction', 'app.ws requires a generator function in second param');
