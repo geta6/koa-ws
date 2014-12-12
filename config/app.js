@@ -1,15 +1,17 @@
-// DEPENDENCIES
-var co = require('co');
-var path = require('path');
-var wait = require('co-wait');
-var debug = require('debug')('app');
+'use strict';
 
-var redis = require(path.resolve('config', 'redis'));
-var koa = require(path.resolve('config', 'koa'));
+// DEPENDENCIES
+const co = require('co');
+const path = require('path');
+const wait = require('co-wait');
+const debug = require('debug')('app');
+
+const redis = require(path.resolve('config', 'redis'));
+const koa = require(path.resolve('config', 'koa'));
 
 
 // APPLICATION
-var app = koa();
+const app = koa();
 
 
 // MIDDLEWARES
@@ -28,9 +30,9 @@ app.use(function*(){
 
 // HELPER
 var visit = 0;
-var prefix = 'track:';
+const prefix = 'track:';
 
-var play = co.wrap(function*(guid){
+const play = co.wrap(function*(guid){
   var track = yield redis.hgetall(prefix + guid);
   if (!track) track = { guid: guid, play: 0 };
   track.play = parseInt(track.play, 10) + 1;
@@ -40,7 +42,7 @@ var play = co.wrap(function*(guid){
   return track;
 });
 
-var stop = co.wrap(function*(guid){
+const stop = co.wrap(function*(guid){
   var track = yield redis.hgetall(prefix + guid);
   if (!track) track = { guid: guid, play: 1 };
   track.play = parseInt(track.play, 10) - 1;
@@ -77,7 +79,7 @@ app.ws('track', function*(){
 
 app.ws('tracks', function*(){
   var tracks = yield redis.search(prefix + '*');
-  for (var i = tracks.length - 1; 0 <= i; i--) {
+  for (let i = tracks.length - 1; 0 <= i; i--) {
     if (tracks[i].play === 0) {
       tracks.splice(i, 1);
     }
